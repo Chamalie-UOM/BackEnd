@@ -82,8 +82,15 @@ WSGI_APPLICATION = 'phyloGenie_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+                    'read_default_file': '/etc/mysql/my.cnf',
+                },
+        'NAME': 'phylo_data',
+        'USER': 'root',
+        'PASSWORD': 'Chamalie$1995',
+        'HOST': 'localhost',
+        'PORT': '8000',
     }
 }
 
@@ -129,6 +136,9 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = '/media/'
+
+if not os.path.exists(MEDIA_ROOT):
+    os.makedirs(MEDIA_ROOT)

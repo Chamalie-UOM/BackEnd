@@ -39,5 +39,3 @@ if settings.DEBUG is True:
 
 
 
-
-

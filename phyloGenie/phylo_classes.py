@@ -1,10 +1,15 @@
 import csv
 import os
 
-from django.core.files import File
+from Bio import AlignIO, SeqIO
 
+# from phyloGenie.DistanceMatrixCalculatorGPU import DistanceCalculator_GPU
+from phyloGenie.DistanceMatrixCalculatorSerial import DistanceCalculator
+from phyloGenie.NJ_treeSerial import NJTree
+# from phyloGenie.NJ_treev2 import NJTree_Full_GPU
 from phyloGenie_backend.settings import MEDIA_ROOT
 from .upgma_serial import *
+# from .upgma_complete_gpu import *
 from phyloGenie_backend import settings
 
 
@@ -13,8 +18,10 @@ class Recommendation(object):
         self.noOfSeq = 0
         self.lengthOfSeq = 0
         self.typeOfSeq = ""
-        self.score = 10.0
+        self.score = 0
         self.recommendedAlgorithms = []
+        self.DNA_thresh = 0.75
+        self.AA_thresh = 0.25
 
     def readFeaturesFile(self, path):
         file0 = open(os.path.join(settings.BASE_DIR, path))
@@ -27,7 +34,7 @@ class Recommendation(object):
             self.typeOfSeq = featureSet[2]
             self.score = float(featureSet[3])
         # print(noOfSeq, lengthOfSeq, typeOfSeq, score)
-        return (self.noOfSeq, self.lengthOfSeq, self.typeOfSeq)
+        return self.noOfSeq, self.lengthOfSeq, self.typeOfSeq, self.score
 
     def RecommendationOne(self):
         self.recommendedAlgorithms.append("Bayesian")
@@ -45,78 +52,172 @@ class Recommendation(object):
     def RecommendationFour(self):
         self.recommendedAlgorithms.append("Maximum Parsimony")
 
-    def RecommendByScore(self, value):
-        if (self.score <= value):
+    def RecommendByScore(self, thresh, score):
+        if score <= thresh:
             self.RecommendationOne()
         else:
             self.RecommendationTwo()
 
-    def RecommendByScore2(self, value):
-        if (self.score <= value):
+    def RecommendByScore2(self, thresh, score):
+        if score <= thresh:
             self.RecommendationOne()
         else:
             self.RecommendationFour()
 
-    def RecommendByScore3(self, value):
-        if (self.score <= value):
+    def RecommendByScore3(self, thresh, score):
+        if score <= thresh:
             self.RecommendationOne()
         else:
             self.RecommendationThree()
 
-    def recommendation(self, noOfSeq, lengthOfSeq, typeOfSeq):
-        if (noOfSeq <= 25):
-            if (lengthOfSeq <= 500):
-                if (typeOfSeq == 'DNA'):
-                    self.RecommendByScore(0.75)
+    def recommendation(self, noOfSeq, lengthOfSeq, typeOfSeq, score):
+
+        if noOfSeq <= 25:
+            if lengthOfSeq <= 500:
+                if typeOfSeq == 'DNA':
+                    print("came")
+                    self.RecommendByScore(self.DNA_thresh, score)
                 else:
-                    self.RecommendByScore(0.25)
+                    print("ouch")
+                    self.RecommendByScore(self.AA_thresh, score)
 
             else:
-                if (typeOfSeq == 'DNA'):
-                    self.RecommendByScore2(0.75)
+                if typeOfSeq == 'DNA':
+                    self.RecommendByScore2(self.DNA_thresh, score)
                 else:
-                    self.RecommendByScore2(0.25)
+                    self.RecommendByScore2(self.AA_thresh, score)
         else:
-            if (lengthOfSeq <= 500):
-                if (typeOfSeq == 'DNA'):
-                    self.RecommendByScore3(0.75)
+            if lengthOfSeq <= 500:
+                if typeOfSeq == 'DNA':
+                    self.RecommendByScore3(self.DNA_thresh, score)
                 else:
-                    self.RecommendByScore3(0.25)
+                    self.RecommendByScore3(self.AA_thresh, score)
             else:
                 self.RecommendationOne()
 
-        algorithms = ', '.join(self.recommendedAlgorithms)
-        algo_dict = {'algorithms': algorithms}
-        return algo_dict
+        # algorithms = ', '.join(self.recommendedAlgorithms)
+        # algo_dict = {'algorithms': algorithms}
+        return self.recommendedAlgorithms
 
 
+############################################## Class for running phylo
 class TreeGenerator(object):
+
+    # Call distance matrix calculation
+    def calculate_distance_matrix(self, type, file, processor):  # distance matrix calculation
+        if type == 'DNA':
+            matrix_type = 'blastn'
+        else:
+            matrix_type = 'blosum62'
+        # Call for paralleled implementation if Processor set to GPU
+        if processor == 'CPU':
+            calculator = DistanceCalculator(matrix_type)
+        # else:
+        #     calculator = DistanceCalculator_GPU(matrix_type)
+        aln = AlignIO.read(open(file), 'fasta')
+        dm = calculator.get_distance(aln)
+        return dm
+
     def run_algorithm(self, algo, dataset):
-        if (algo == 'UPGMA'):
-            distanceMatrix = DistanceCalculation()
 
-            startTime1 = time.time()
-            alignment = dataset.data.open(mode='rb')
-            temp = "{}.fasta".format(str(dataset.data))
-            fileHandler = open(temp, "wb")
-            fileHandler.write(alignment.read())
-            fileHandler.close()
-            dm = distanceMatrix.calculate_distance_matrix("protein", temp)
-            endTime1 = time.time()
-            print('time taken for distance calculation in seconds', (endTime1 - startTime1))
+        # Take the dataset in to a temporary file for method input
+        alignment = dataset.data.open(mode='rb')
+        temp = "{}.fasta".format(os.path.splitext(str(dataset.data))[0])
+        fileHandler = open(temp, "wb")
+        fileHandler.write(alignment.read())
+        fileHandler.close()
 
-            constructor = UpgmaTreeConstructor()
-            startTime = time.time()
-            upgma_tree = constructor.upgma(dm)
-            endTime = time.time()
+        if algo == 'UPGMA':
+            # Run UPGMA serial implementation when dataset has less than  200 taxa
+            if dataset.size < 200:
+                distanceMatrix = DistanceCalculation()
+
+                # Distance matrix calculation invocation
+                dm = distanceMatrix.calculate_distance_matrix(dataset.type, temp)
+
+                # Tree construction
+                constructor = UpgmaTreeConstructor()
+                tree = constructor.upgma(dm)
+
+                # Remove temporary file
+                os.remove(temp)
+
+                # Write the tree to a newick file and save to database
+                tree_name = "{}_upgma.nw".format(os.path.splitext(str(dataset.data))[0])
+                file_path = os.path.join(MEDIA_ROOT, 'trees', tree_name)
+                Phylo.write(tree, file_path, 'newick')
+                dataset.tree = tree_name
+                dataset.save()
+
+                Phylo.draw_ascii(tree)
+                tree_newick = open(file_path, "r")
+                newick_string = tree_newick.read()
+                newick_string = newick_string.rstrip('\n')
+                return newick_string
+
+            # Run GPU implementation of UPGMA if dataset  has more than 200 taxa
+            elif (dataset.size > 200):
+                return "dataset larger than 200"
+            #     distanceMatrix = FullGpuDistanceCalculation()
+            #
+            #     # Distance matrix calculation invocation
+            #     dm = distanceMatrix.full_gpu_calculate_distance_matrix(dataset.type, temp)
+            #
+            #     # Tree construction
+            #     constructor = FullGpuUpgmaTreeConstructor()
+            #     tree = constructor.full_gpu_upgma(dm)
+            #     tree_name = "{}_upgma_gpu.nw".format(os.path.splitext(str(dataset.data))[0])
+
+        elif algo == 'NJ':
+            if dataset.size < 200:
+                processor_type = 'CPU'
+                dis_matrix = self.calculate_distance_matrix(dataset.type, temp, processor_type)
+
+                # NJ Tree Generation
+                genNJ = NJTree()
+                tree = genNJ.nj(dis_matrix)
+                tree_name = "{}_nj.nw".format(os.path.splitext(str(dataset.data))[0])
+
+                # Remove temporary file
+                os.remove(temp)
+
+                # Write the tree to a newick file and save to database
+                file_path = os.path.join(MEDIA_ROOT, 'trees', tree_name)
+                Phylo.write(tree, file_path, 'newick')
+                dataset.tree = tree_name
+                dataset.save()
+
+                Phylo.draw_ascii(tree)
+                tree_newick = open(file_path, "r")
+                newick_string = tree_newick.read()
+                newick_string = newick_string.strip('\\n')
+                return newick_string
+
+            # Run GPU implementation of NJ if dataset  has more than 200 taxa
+            elif dataset.size >= 200:
+                return "dataset larger than 200"
+            #     processor_type = 'GPU'
+            #     dis_matrix = self.calculate_distance_matrix(dataset.type, temp, processor_type)
+            #
+            #     # NJ Tree Generation with GPU acceleration
+            #     genNJ = NJTree_Full_GPU()
+            #     tree = genNJ.nj(dis_matrix)
+            #     tree_name = "{}_nj_gpu.nw".format(os.path.splitext(str(dataset.data))[0])
+
+    # Return Final Tree (Common for all algorithms)
+            # Remove temporary file
             os.remove(temp)
+
+            # Write the tree to a newick file and save to database
             tree_name = "{}_upgma.nw".format(os.path.splitext(str(dataset.data))[0])
-            file_path = os.path.join(MEDIA_ROOT, tree_name)
-            Phylo.write(upgma_tree, file_path, 'newick')
+            file_path = os.path.join(MEDIA_ROOT, 'trees', tree_name)
+            Phylo.write(tree, file_path, 'newick')
+            dataset.tree = tree_name
+            dataset.save()
 
-            print('time taken for tree generation in seconds', (endTime - startTime))
-            print('time taken for total tree generation in seconds', (endTime - startTime1))
-            Phylo.draw_ascii(upgma_tree)
-            return (endTime - startTime1)
-
+            Phylo.draw_ascii(tree)
+            tree_newick = open(file_path, "r")
+            newick_string = tree_newick.read()
+            newick_string = newick_string.rstrip('\n')
+            return newick_string
 

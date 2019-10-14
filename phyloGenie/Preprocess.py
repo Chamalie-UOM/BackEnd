@@ -3,19 +3,21 @@ import os
 
 
 class DataPreprocessor:
-    seq_ids = []
-    error_ids = []
-    data = []  # non duplicate data list
-    preprocessed_data = []  # pre processed data list
-    file_types = {"fasta": "fasta", "fas": "fasta"}  # accepted data input file types
-    type_id = {"DNA": [], "AA": []}  # dictionary to keep ids and types
-    valid_DNA = "ACGT"
-    valid_AA = "ARNDBCEQZGHILKMFPSTWYV"
-    data_type = ""
-    dna_count = 0  # no of dna sequences
-    aa_count = 0  # no of aa sequences
-    seq_count = 0  # no of sequences
-    valid_SC = "_?-"
+
+    def __init__(self):
+        self.seq_ids = []
+        self.error_ids = []
+        self.data = []  # non duplicate data list
+        self.preprocessed_data = []  # pre processed data list
+        self.file_types = {"fasta": "fasta", "fas": "fasta"}  # accepted data input file types
+        self.type_id = {"DNA": [], "AA": []}  # dictionary to keep ids and types
+        self.valid_DNA = "ACGT"
+        self.valid_AA = "ARNDBCEQZGHILKMFPSTWYV"
+        self.data_type = ""
+        self.dna_count = 0  # no of dna sequences
+        self.aa_count = 0  # no of aa sequences
+        self.seq_count = 0  # no of sequences
+        self.valid_SC = "_?-"
 
     def findSeqType(self, seq, length):
         dna_c = 0
@@ -27,8 +29,10 @@ class DataPreprocessor:
                 dna_c += 1
             if char in self.valid_AA:
                 aa_c += 1
+
             if char in self.valid_SC:
-                length = length - 1
+                length = length-1
+
         if dna_c == length:  # check valid dna sequence or not
             self.dna_count += 1
             self.seq_count += 1
@@ -38,6 +42,7 @@ class DataPreprocessor:
             self.seq_count += 1
             self.data_type = 'AA'
         else:
+            #print("in here")
             self.data_type = 'UNDEFINED'
 
     # check the data type of the complete data set
@@ -55,6 +60,7 @@ class DataPreprocessor:
 
         else:
             print("incompatible sequence  records found")  # ambiguous data set
+        return self.data_type
 
     def processData(self, file):
         in_file = file
@@ -65,7 +71,7 @@ class DataPreprocessor:
             for seq in dataset:
                 if seq.id not in self.seq_ids:  # handle duplicate records
                     self.findSeqType(seq.seq, len(seq))
-                    if self.data_type != 'UNDEFINED' or self.data_type != '':  # to ignore incorrect sequences
+                    if self.data_type != 'UNDEFINED' and self.data_type != '':  # to ignore incorrect sequences
                         self.type_id[self.data_type].append(seq.id)  # add to dictionary to keep track of dna or aa
                         self.seq_ids.append(seq.id)
                         self.data.append(seq)
@@ -74,7 +80,7 @@ class DataPreprocessor:
                 else:
                     print("Duplicate record found", seq.id)
 
-            self.findDataSetType()  # data type of complete data set
+            data_type = self.findDataSetType()  # data type of complete data set
             # print(self.error_ids)
             for seq in self.data:  # to catch correct sequences after type check
                 if seq.id not in self.error_ids:
@@ -84,7 +90,8 @@ class DataPreprocessor:
             os.path.splitext(in_file)[0])  # write the preprocessed data to a temporary file
         with open(out_file, 'w') as f:
             SeqIO.write(self.preprocessed_data, f, 'fasta')
-        return out_file
+        return out_file, data_type
+
 
 
 """ start = time.time()

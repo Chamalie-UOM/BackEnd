@@ -135,6 +135,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+SCORE_MAT_PATH = os.path.join(BASE_DIR, 'phyloGenie/data/DNA.mat')
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

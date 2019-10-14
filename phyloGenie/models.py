@@ -12,7 +12,8 @@ class Dataset(models.Model):
     size = models.IntegerField(default=0)
     seq_length = models.IntegerField(default=0)
     type = models.CharField(max_length=255, default='unknown')
-    sim_score = models.DecimalField(max_digits=5, decimal_places=3, default=Decimal('0.000'))
+    sim_score = models.DecimalField(max_digits=7, decimal_places=6, default=Decimal('0.000000'))
+    tree = models.FileField(upload_to='trees', default='')
 
     def __str__(self):
         return self.data.name

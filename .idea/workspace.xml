@@ -2,24 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="61245aad-7495-49ed-b0d5-31cd0ffbcbdc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/chamalie.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/phyloGenie/mstatx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/file_processed.fasta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/file_processed_aligned.fasta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/01_n25.fas" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/featuresfile.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/snp_example_phyloviz.fasta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/casein_milk_processed.fasta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/n50aa_processed_aligned.fasta" beforeDir="false" afterPath="$PROJECT_DIR$/media/n50aa_processed_aligned.fasta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/n50aa_processed_aligned_upgma.nw" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/phyloGenie/Alignment.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/Alignment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phyloGenie/migrations/0002_recommendations.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/phyloGenie/migrations/0003_preprocessmodel.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phyloGenie/Preprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/Preprocess.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/phyloGenie/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/phyloGenie/phylo_classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/phylo_classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phyloGenie/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/phyloGenie/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/phyloGenie/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/phyloGenie_backend/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie_backend/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phyloGenie_backend/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie_backend/urls.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -39,8 +33,13 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/phyloGenie" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/phyloGenie" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">

@@ -167,6 +167,22 @@ class TreeGenerator(object):
             #     constructor = FullGpuUpgmaTreeConstructor()
             #     tree = constructor.full_gpu_upgma(dm)
             #     tree_name = "{}_upgma_gpu.nw".format(os.path.splitext(str(dataset.data))[0])
+            # Remove temporary file
+            # os.remove(temp)
+            #
+            # # Write the tree to a newick file and save to database
+            #
+            # file_path = os.path.join(MEDIA_ROOT, 'trees', tree_name)
+            # Phylo.write(tree, file_path, 'newick')
+            # dataset.tree = tree_name
+            # dataset.save()
+            #
+            # Phylo.draw_ascii(tree)
+            # tree_newick = open(file_path, "r")
+            # newick_string = tree_newick.read()
+            # newick_string = newick_string.rstrip('\n')
+            # return newick_string
+
 
         elif algo == 'NJ':
             if dataset.size < 200:
@@ -203,21 +219,18 @@ class TreeGenerator(object):
             #     genNJ = NJTree_Full_GPU()
             #     tree = genNJ.nj(dis_matrix)
             #     tree_name = "{}_nj_gpu.nw".format(os.path.splitext(str(dataset.data))[0])
-
-    # Return Final Tree (Common for all algorithms)
             # Remove temporary file
-            os.remove(temp)
-
-            # Write the tree to a newick file and save to database
-            tree_name = "{}_upgma.nw".format(os.path.splitext(str(dataset.data))[0])
-            file_path = os.path.join(MEDIA_ROOT, 'trees', tree_name)
-            Phylo.write(tree, file_path, 'newick')
-            dataset.tree = tree_name
-            dataset.save()
-
-            Phylo.draw_ascii(tree)
-            tree_newick = open(file_path, "r")
-            newick_string = tree_newick.read()
-            newick_string = newick_string.rstrip('\n')
-            return newick_string
-
+            # os.remove(temp)
+            #
+            # # Write the tree to a newick file and save to database
+            #
+            # file_path = os.path.join(MEDIA_ROOT, 'trees', tree_name)
+            # Phylo.write(tree, file_path, 'newick')
+            # dataset.tree = tree_name
+            # dataset.save()
+            #
+            # Phylo.draw_ascii(tree)
+            # tree_newick = open(file_path, "r")
+            # newick_string = tree_newick.read()
+            # newick_string = newick_string.rstrip('\n')
+            # return newick_string

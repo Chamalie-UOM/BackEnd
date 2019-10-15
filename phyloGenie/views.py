@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from phyloGenie.Alignment import MuscleMSA
+from phyloGenie.FinalAPI import DriveConnector
 from phyloGenie.Preprocess import DataPreprocessor
 from phyloGenie.ScoreCalculation import SimilarityScoreCalculator
 from phyloGenie.models import Dataset
@@ -73,16 +74,6 @@ class PreprocessView(APIView):
         except RuntimeError:
             return JsonResponse(dict(status=status.HTTP_400_BAD_REQUEST))
 
-        # Call for algorithm recommendation
-        # recommender = Recommendation()
-        # recommendations = recommender.recommendation(no_of_taxa, seq_len, data_type)
-        # recommend_serializer = RecommendSerializer(data=recommendations)
-        #
-        # if recommend_serializer.is_valid():
-        #     return Response(recommend_serializer.data, status=status.HTTP_201_CREATED)
-        # else:
-        #     return Response(recommend_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class RecommendView(APIView):
 
@@ -104,12 +95,6 @@ class RecommendView(APIView):
             return Response(dict(algorithms=recommendations, doc_id=data_id), status=status.HTTP_201_CREATED)
         except RuntimeError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        # recommend_serializer = RecommendSerializer(data=recommendations)
-
-        # if recommend_serializer.is_valid():
-        #     return Response(recommend_serializer.data, status=status.HTTP_201_CREATED)
-        # else:
-        #     return Response(recommend_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # Generate tree from the user selected algorithm
@@ -125,10 +110,21 @@ class TreeGenerationView(APIView):
         try:
             # run the selected inference algorithm for the dataset
             tree = generator.run_algorithm(algo, dataset)
-            # file = open(file_path, 'rb')
-            # response = FileResponse(file)
-            # response['TREE_STRING'] = tree
-            # return response
-            return Response(dict(tree=tree), status=status.HTTP_201_CREATED)
+            return Response(dict(tree=tree, tree_id=data_id), status=status.HTTP_201_CREATED)
         except RuntimeError as e:
             return Response(dict(error=e), status=status.HTTP_400_BAD_REQUEST)
+
+
+# Export newick file to the user's google drive
+class DriveExportView(APIView):
+    def post(self, request, *args, **kwargs):
+        tree_id = request.GET.get('tree_id')
+        print(tree_id)
+        dataset = Dataset.objects.get(pk=tree_id)
+        tree = dataset.tree
+        try:
+            connector = DriveConnector()
+            connector.export_to_google_drive(tree)
+            return Response(status=status.HTTP_200_OK)
+        except RuntimeError:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)

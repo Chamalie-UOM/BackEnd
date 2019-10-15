@@ -5,5 +5,6 @@ urlpatterns = [
     path('upload', FileUploadView.as_view()),
     path('recommend', RecommendView.as_view()),
     path('preprocess', PreprocessView.as_view()),
-    path('getNewick', TreeGenerationView.as_view())
+    path('getNewick', TreeGenerationView.as_view()),
+    path('export', DriveExportView.as_view())
 ]

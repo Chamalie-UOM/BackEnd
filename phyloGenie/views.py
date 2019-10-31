@@ -70,7 +70,10 @@ class PreprocessView(APIView):
         try:
             ds = Dataset.objects.create(data=align_file, size=no_of_taxa, seq_length=seq_len, type=data_type,
                                         sim_score=score)
-            return Response(dict(data=ds.id), status=status.HTTP_201_CREATED)
+            msa_file = open(align_file_path, "r")
+            msa_string = msa_file.read()
+            msa_file.close()
+            return Response(dict(data=ds.id, msa=msa_string), status=status.HTTP_201_CREATED)
         except RuntimeError:
             return JsonResponse(dict(status=status.HTTP_400_BAD_REQUEST))
 

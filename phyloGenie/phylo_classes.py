@@ -7,6 +7,7 @@ from Bio import AlignIO, SeqIO
 from phyloGenie.DistanceMatrixCalculatorSerial import DistanceCalculator
 from phyloGenie.NJ_treeSerial import NJTree
 # from phyloGenie.NJ_treev2 import NJTree_Full_GPU
+from phyloGenie.ml import MlTreeConstructor
 from phyloGenie_backend.settings import MEDIA_ROOT
 from .upgma_serial import *
 # from .upgma_complete_gpu import *
@@ -234,3 +235,24 @@ class TreeGenerator(object):
             # newick_string = tree_newick.read()
             # newick_string = newick_string.rstrip('\n')
             # return newick_string
+        elif algo == 'ML':
+            # Run PhyML version
+
+            constructor = MlTreeConstructor()
+            constructor.ml(dataset.type, temp)
+
+            # Remove temporary file
+            os.remove(temp)
+
+            # need to check where the file is created and change accordingly
+            tree_name = "{}.phylip_phyml_tree".format(os.path.splitext(str(dataset.data))[0])
+            file_path = os.path.join(MEDIA_ROOT, 'trees', tree_name)
+            #Phylo.write(tree, file_path, 'newick')
+            dataset.tree = tree_name
+            dataset.save()
+
+            #Phylo.draw_ascii(tree)
+            tree_newick = open(file_path, "r")
+            newick_string = tree_newick.read()
+            newick_string = newick_string.rstrip('\n')
+            return newick_string

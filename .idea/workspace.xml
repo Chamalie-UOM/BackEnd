@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="61245aad-7495-49ed-b0d5-31cd0ffbcbdc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/phyloGenie/ml.py" afterDir="false" />
+    <list default="true" id="61245aad-7495-49ed-b0d5-31cd0ffbcbdc" name="Default Changelist" comment="phyml code added">
+      <change afterPath="$PROJECT_DIR$/phyloGenie/MrBayes.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/phyloGenie/bayesian.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phyloGenie/phylo_classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/phylo_classes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phyloGenie/MstatX.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/MstatX.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,7 +32,7 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/phyloGenie" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -90,6 +91,14 @@
       <option name="presentableId" value="Default" />
       <updated>1564834834345</updated>
     </task>
+    <task id="LOCAL-00001" summary="phyml code added">
+      <created>1573410406395</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1573410406395</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -104,5 +113,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="phyml code added" />
+    <option name="LAST_COMMIT_MESSAGE" value="phyml code added" />
   </component>
 </project>

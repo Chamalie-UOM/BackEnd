@@ -4,29 +4,6 @@ from __future__ import print_function
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
-"""Available options
-    -a, --trident_a : Factor applied to t(x) (see trident) [default=1.0]
-   -b, --trident_b : Factor applied to r(x) (see trident) [default=0.5]
-   -c, --trident_c : Factor applied to g(x) (see trident) [default=3.0]
-   -g, --global    : Output the global score                           
-   -h, --help      : Print this help                                   
-   -i, --input     : MSA input file name                               
-   -m, --matrix    : Score matrix file name                            
-   -n, --nb_seq    : Maximum number of sequences read [default=500]    
-   -o, --output    : Output file name [default=ouput.txt]              
-   -s, --statistic : Statistics [default=wentropy]                     
-   -t, --threshold : Threshold to print correlation [default=0.8]      
-   -v, --verbose   : Verbose mode                                      
-   -w, --window    : Number of side columns (jensen score)  
-
-    Available Statistics
-  	wentropy (1)
-  	trident  (1)
-  	mvector  (1)
-  	jensen   (1)
-  	kabat    (1)
-  	gap      (1)  """
-
 
 class MstatxCommandline(AbstractCommandline):
 

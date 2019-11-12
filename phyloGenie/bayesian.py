@@ -63,5 +63,6 @@ class BayesianTreeConstructor:
         tree_base = os.path.splitext(tree_file)[0]
 
         Phylo.convert(tree_file, 'nexus', tree_base + '.newick', 'newick')
+        os.remove(tree_file)
 
 

@@ -239,13 +239,13 @@ class TreeGenerator(object):
             # Run PhyML version
 
             constructor = MlTreeConstructor()
-            constructor.ml(dataset.type, temp)
+            tree_file_name = constructor.ml(dataset.type, temp)
 
             # Remove temporary file
             os.remove(temp)
 
             # need to check where the file is created and change accordingly
-            tree_name = "{}.phylip_phyml_tree".format(os.path.splitext(str(dataset.data))[0])
+            '''tree_name = tree_file_name
             file_path = os.path.join(MEDIA_ROOT, 'trees', tree_name)
             #Phylo.write(tree, file_path, 'newick')
             dataset.tree = tree_name
@@ -255,4 +255,4 @@ class TreeGenerator(object):
             tree_newick = open(file_path, "r")
             newick_string = tree_newick.read()
             newick_string = newick_string.rstrip('\n')
-            return newick_string
+            return newick_string '''

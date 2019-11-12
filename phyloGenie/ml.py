@@ -36,10 +36,17 @@ class MlTreeConstructor:
 
     def ml(self, data_type, input_file):
 
-        data_file = self.converter(input_file, data_type)  # phylip converted file
+        self.converter(input_file, data_type)
+        data_file = os.path.splitext(input_file)[0] + '.phylip'
         if data_type == 'DNA':
             phyml_cline = PhymlCommandline(input=data_file)
         else:
             phyml_cline = PhymlCommandline(input=data_file, datatype='aa')
 
         stdout, stderr = phyml_cline()
+        tree_file_name = '{}_ml.newick'.format(os.path.splitext(input_file)[0])
+        # file_path = os.path.join(MEDIA_ROOT, file_name)   # write the alignment to a temporary file
+        with open(tree_file_name, 'w') as f:
+            f.write(stdout)
+        os.remove(data_file)
+        return tree_file_name

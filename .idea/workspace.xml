@@ -5,6 +5,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/phyloGenie/bayesian.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/bayesian.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/phyloGenie/ml.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/ml.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phyloGenie/phylo_classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/phylo_classes.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -111,7 +112,14 @@
       <option name="project" value="LOCAL" />
       <updated>1573560200303</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="format conversion for ml and bayesian added">
+      <created>1573562773071</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1573562773071</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -131,6 +139,7 @@
     <MESSAGE value="phyml code added" />
     <MESSAGE value="bayesian code added" />
     <MESSAGE value="bayesian code changed" />
-    <option name="LAST_COMMIT_MESSAGE" value="bayesian code changed" />
+    <MESSAGE value="format conversion for ml and bayesian added" />
+    <option name="LAST_COMMIT_MESSAGE" value="format conversion for ml and bayesian added" />
   </component>
 </project>

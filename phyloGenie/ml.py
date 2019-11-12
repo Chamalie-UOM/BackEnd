@@ -5,11 +5,12 @@ from Bio import Alphabet
 from Bio.Phylo.Applications import PhymlCommandline
 from io import StringIO
 from Bio import AlignIO, SeqIO
+from Bio import SeqIO
+from Bio.Alphabet import IUPAC
 
 
 class MlTreeConstructor:
-
-    def formatConversion(self, data_type, file):
+    '''def formatConversion(self, data_type, file):
 
         temp = "{}.phylip".format(os.path.splitext(file)[0])
         # file_Handler = open(temp, "wb")
@@ -20,11 +21,22 @@ class MlTreeConstructor:
             AlignIO.convert(file, "fasta", temp, "phylip", alphabet=Alphabet.generic_nucleotide)
         else:
             AlignIO.convert(file, "fasta", temp, "phylip", alphabet=Alphabet.generic_protein)
-        return temp
+        return temp '''
+
+    def converter(self, file, data_type):
+        base = os.path.splitext(file)[0]
+        if data_type == 'DNA':
+            return SeqIO.convert(file, "fasta",
+                                 base + ".phylip", "phylip",
+                                 alphabet=IUPAC.ambiguous_dna)
+        else:
+            return SeqIO.convert(file, "fasta",
+                                 base + ".phylip", "phylip",
+                                 alphabet=Alphabet.generic_protein)
 
     def ml(self, data_type, input_file):
 
-        data_file = self.formatConversion(data_type, input_file)  # phylip converted file
+        data_file = self.converter(input_file, data_type)  # phylip converted file
         if data_type == 'DNA':
             phyml_cline = PhymlCommandline(input=data_file)
         else:

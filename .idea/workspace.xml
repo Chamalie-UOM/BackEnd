@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="61245aad-7495-49ed-b0d5-31cd0ffbcbdc" name="Default Changelist" comment="bayesian code added">
+    <list default="true" id="61245aad-7495-49ed-b0d5-31cd0ffbcbdc" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/phyloGenie/bayesian.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/bayesian.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phyloGenie_backend/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie_backend/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phyloGenie/ml.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/ml.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -104,7 +104,14 @@
       <option name="project" value="LOCAL" />
       <updated>1573450785318</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="bayesian code changed">
+      <created>1573560200303</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1573560200303</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -123,6 +130,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="phyml code added" />
     <MESSAGE value="bayesian code added" />
-    <option name="LAST_COMMIT_MESSAGE" value="bayesian code added" />
+    <MESSAGE value="bayesian code changed" />
+    <option name="LAST_COMMIT_MESSAGE" value="bayesian code changed" />
   </component>
 </project>

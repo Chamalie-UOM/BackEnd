@@ -1,14 +1,29 @@
 import glob
 import os
 
+from Bio.Alphabet import IUPAC
+from Bio import Alphabet
 from phyloGenie.MrBayes import MrBayesCommandline
-from Bio import Phylo
+from Bio import Phylo, SeqIO
 import re
 
 class BayesianTreeConstructor:
 
-    def bayesian(self,file_name):
-        base = os.path.splitext(file_name)[0]
+    def converter(self, file, data_type):
+        base = os.path.splitext(file)[0]
+        if data_type == 'DNA':
+            return SeqIO.convert(file, "fasta",
+                                 base + ".nex", "nexus",
+                                 alphabet=IUPAC.ambiguous_dna)
+        else:
+            return SeqIO.convert(file, "fasta",
+                                 base + ".nex", "nexus",
+                                 alphabet=Alphabet.generic_protein)
+
+    def bayesian(self, file_name, data_type):
+
+        nex_file = self.converter(file_name, data_type)
+        base = os.path.splitext(nex_file)[0]
         bat_file = base + '_batch.txt'
         f = open(bat_file, "w+")
 

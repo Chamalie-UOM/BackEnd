@@ -1,7 +1,9 @@
 import csv
 import os
+from subprocess import call
 
-from Bio import AlignIO, SeqIO
+from Bio import AlignIO, SeqIO, Alphabet
+from Bio.Alphabet import IUPAC
 
 # from phyloGenie.DistanceMatrixCalculatorGPU import DistanceCalculator_GPU
 from phyloGenie.DistanceMatrixCalculatorSerial import DistanceCalculator
@@ -234,3 +236,48 @@ class TreeGenerator(object):
             # newick_string = tree_newick.read()
             # newick_string = newick_string.rstrip('\n')
             # return newick_string
+
+        elif algo == 'Maximum Parsimony':
+            if dataset.type == 'DNA':
+                SeqIO.convert(temp, "fasta",
+                              "infile", "phylip",
+                              alphabet=IUPAC.ambiguous_dna)
+
+                call("phyloGenie/dnapars_noop")
+                tree_newick = open("outtree", "r")
+                newick_string = tree_newick.read()
+                tree_newick.close()
+
+                tree_name = "{}_pars.nw".format(os.path.splitext(str(dataset.data))[0])
+                file_path = os.path.join(MEDIA_ROOT, 'trees', tree_name)
+                dataset.tree = tree_name
+                dataset.save()
+                os.rename('outtree', file_path)
+
+                os.remove(temp)
+                os.remove("infile")
+                os.remove("outfile")
+
+                return newick_string
+
+            else:
+                SeqIO.convert(temp, "fasta",
+                              "infile", "phylip",
+                              alphabet=Alphabet.generic_protein)
+
+                call("phyloGenie/protpars_serial")
+                tree_newick = open("outtree", "r")
+                newick_string = tree_newick.read()
+                tree_newick.close()
+
+                tree_name = "{}_pars.nw".format(os.path.splitext(str(dataset.data))[0])
+                file_path = os.path.join(MEDIA_ROOT, 'trees', tree_name)
+                dataset.tree = tree_name
+                dataset.save()
+                os.rename('outtree', file_path)
+
+                os.remove(temp)
+                os.remove("infile")
+                os.remove("outfile")
+
+                return newick_string

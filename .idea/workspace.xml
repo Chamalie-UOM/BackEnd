@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="61245aad-7495-49ed-b0d5-31cd0ffbcbdc" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phyloGenie/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phyloGenie/phylo_classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/phylo_classes.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

@@ -239,7 +239,7 @@ class TreeGenerator(object):
             # Run PhyML version
 
             constructor = MlTreeConstructor()
-            tree_file_name = constructor.ml(dataset.type, temp)
+            constructor.ml(dataset.type, temp)
 
             # Remove temporary file
             os.remove(temp)

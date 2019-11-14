@@ -3,6 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="61245aad-7495-49ed-b0d5-31cd0ffbcbdc" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
+=======
+      <change beforePath="$PROJECT_DIR$/phyloGenie/ml.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/ml.py" afterDir="false" />
+>>>>>>> abb3d23692e60efb15b736f7b07b2e6690bea152
       <change beforePath="$PROJECT_DIR$/phyloGenie/phylo_classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/phyloGenie/phylo_classes.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -10,6 +14,13 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -82,6 +93,42 @@
       <option name="presentableId" value="Default" />
       <updated>1564834834345</updated>
     </task>
+    <task id="LOCAL-00001" summary="phyml code added">
+      <created>1573410406395</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1573410406395</updated>
+    </task>
+    <task id="LOCAL-00002" summary="bayesian code added">
+      <created>1573450785318</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1573450785318</updated>
+    </task>
+    <task id="LOCAL-00003" summary="bayesian code changed">
+      <created>1573560200303</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1573560200303</updated>
+    </task>
+    <task id="LOCAL-00004" summary="format conversion for ml and bayesian added">
+      <created>1573562773071</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1573562773071</updated>
+    </task>
+    <task id="LOCAL-00005" summary="update bayesian and ml">
+      <created>1573582948142</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1573582948142</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -96,5 +143,13 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="phyml code added" />
+    <MESSAGE value="bayesian code added" />
+    <MESSAGE value="bayesian code changed" />
+    <MESSAGE value="format conversion for ml and bayesian added" />
+    <MESSAGE value="update bayesian and ml" />
+    <option name="LAST_COMMIT_MESSAGE" value="update bayesian and ml" />
   </component>
 </project>

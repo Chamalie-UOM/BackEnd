@@ -5,13 +5,15 @@ from subprocess import call
 from Bio import AlignIO, SeqIO, Alphabet
 from Bio.Alphabet import IUPAC
 
-# from phyloGenie.DistanceMatrixCalculatorGPU import DistanceCalculator_GPU
+from phyloGenie.DistanceMatrixCalculatorGPU import DistanceCalculator_GPU
 from phyloGenie.DistanceMatrixCalculatorSerial import DistanceCalculator
 from phyloGenie.NJ_treeSerial import NJTree
-# from phyloGenie.NJ_treev2 import NJTree_Full_GPU
+from phyloGenie.NJ_treev2 import NJTree_Full_GPU
+from phyloGenie.bayesian import BayesianTreeConstructor
+from phyloGenie.ml import MlTreeConstructor
 from phyloGenie_backend.settings import MEDIA_ROOT
 from .upgma_serial import *
-# from .upgma_complete_gpu import *
+from .upgma_complete_gpu import *
 from phyloGenie_backend import settings
 
 
@@ -114,8 +116,8 @@ class TreeGenerator(object):
         # Call for paralleled implementation if Processor set to GPU
         if processor == 'CPU':
             calculator = DistanceCalculator(matrix_type)
-        # else:
-        #     calculator = DistanceCalculator_GPU(matrix_type)
+        else:
+            calculator = DistanceCalculator_GPU(matrix_type)
         aln = AlignIO.read(open(file), 'fasta')
         dm = calculator.get_distance(aln)
         return dm
@@ -129,6 +131,7 @@ class TreeGenerator(object):
         fileHandler.write(alignment.read())
         fileHandler.close()
 
+        # run UPGMA
         if algo == 'UPGMA':
             # Run UPGMA serial implementation when dataset has less than  200 taxa
             if dataset.size < 200:
@@ -159,33 +162,33 @@ class TreeGenerator(object):
 
             # Run GPU implementation of UPGMA if dataset  has more than 200 taxa
             elif (dataset.size > 200):
-                return "dataset larger than 200"
-            #     distanceMatrix = FullGpuDistanceCalculation()
-            #
-            #     # Distance matrix calculation invocation
-            #     dm = distanceMatrix.full_gpu_calculate_distance_matrix(dataset.type, temp)
-            #
-            #     # Tree construction
-            #     constructor = FullGpuUpgmaTreeConstructor()
-            #     tree = constructor.full_gpu_upgma(dm)
-            #     tree_name = "{}_upgma_gpu.nw".format(os.path.splitext(str(dataset.data))[0])
-            # Remove temporary file
-            # os.remove(temp)
-            #
-            # # Write the tree to a newick file and save to database
-            #
-            # file_path = os.path.join(MEDIA_ROOT, 'trees', tree_name)
-            # Phylo.write(tree, file_path, 'newick')
-            # dataset.tree = tree_name
-            # dataset.save()
-            #
-            # Phylo.draw_ascii(tree)
-            # tree_newick = open(file_path, "r")
-            # newick_string = tree_newick.read()
-            # newick_string = newick_string.rstrip('\n')
-            # return newick_string
+                # return "dataset larger than 200"
+                distanceMatrix = FullGpuDistanceCalculation()
 
+                # Distance matrix calculation invocation
+                dm = distanceMatrix.full_gpu_calculate_distance_matrix(dataset.type, temp)
 
+                # Tree construction
+                constructor = FullGpuUpgmaTreeConstructor()
+                tree = constructor.full_gpu_upgma(dm)
+                tree_name = "{}_upgma_gpu.nw".format(os.path.splitext(str(dataset.data))[0])
+                # Remove temporary file
+                os.remove(temp)
+
+                # Write the tree to a newick file and save to database
+
+                file_path = os.path.join(MEDIA_ROOT, 'trees', tree_name)
+                Phylo.write(tree, file_path, 'newick')
+                dataset.tree = tree_name
+                dataset.save()
+
+                Phylo.draw_ascii(tree)
+                tree_newick = open(file_path, "r")
+                newick_string = tree_newick.read()
+                newick_string = newick_string.rstrip('\n')
+                return newick_string
+
+        # run NJ
         elif algo == 'NJ':
             if dataset.size < 200:
                 processor_type = 'CPU'
@@ -213,30 +216,31 @@ class TreeGenerator(object):
 
             # Run GPU implementation of NJ if dataset  has more than 200 taxa
             elif dataset.size >= 200:
-                return "dataset larger than 200"
-            #     processor_type = 'GPU'
-            #     dis_matrix = self.calculate_distance_matrix(dataset.type, temp, processor_type)
-            #
-            #     # NJ Tree Generation with GPU acceleration
-            #     genNJ = NJTree_Full_GPU()
-            #     tree = genNJ.nj(dis_matrix)
-            #     tree_name = "{}_nj_gpu.nw".format(os.path.splitext(str(dataset.data))[0])
-            # Remove temporary file
-            # os.remove(temp)
-            #
-            # # Write the tree to a newick file and save to database
-            #
-            # file_path = os.path.join(MEDIA_ROOT, 'trees', tree_name)
-            # Phylo.write(tree, file_path, 'newick')
-            # dataset.tree = tree_name
-            # dataset.save()
-            #
-            # Phylo.draw_ascii(tree)
-            # tree_newick = open(file_path, "r")
-            # newick_string = tree_newick.read()
-            # newick_string = newick_string.rstrip('\n')
-            # return newick_string
+                # return "dataset larger than 200"
+                processor_type = 'GPU'
+                dis_matrix = self.calculate_distance_matrix(dataset.type, temp, processor_type)
 
+                # NJ Tree Generation with GPU acceleration
+                genNJ = NJTree_Full_GPU()
+                tree = genNJ.nj_full_gpu(dis_matrix)
+                tree_name = "{}_nj_gpu.nw".format(os.path.splitext(str(dataset.data))[0])
+                # Remove temporary file
+                os.remove(temp)
+
+                # Write the tree to a newick file and save to database
+
+                file_path = os.path.join(MEDIA_ROOT, 'trees', tree_name)
+                Phylo.write(tree, file_path, 'newick')
+                dataset.tree = tree_name
+                dataset.save()
+
+                Phylo.draw_ascii(tree)
+                tree_newick = open(file_path, "r")
+                newick_string = tree_newick.read()
+                newick_string = newick_string.rstrip('\n')
+                return newick_string
+
+        # run maximum parsimony
         elif algo == 'Maximum Parsimony':
             if dataset.type == 'DNA':
                 SeqIO.convert(temp, "fasta",
@@ -281,3 +285,46 @@ class TreeGenerator(object):
                 os.remove("outfile")
 
                 return newick_string
+
+        # run ML
+        elif algo == 'Maximum Likelihood':
+            # Run PhyML version
+
+            constructor = MlTreeConstructor()
+            constructor.ml(dataset.type, temp)
+
+            tree_name = "{}_ml.nw".format(os.path.splitext(str(dataset.data))[0])
+            tree_newick = open(tree_name, "r")
+            newick_string = tree_newick.read()
+            tree_newick.close()
+
+            file_path = os.path.join(MEDIA_ROOT, 'trees', tree_name)
+            dataset.tree = tree_name
+            dataset.save()
+            os.rename(tree_name, file_path)
+
+            # Remove temporary file
+            os.remove(temp)
+
+            return newick_string
+
+        elif algo == "Bayesian":
+
+            constructor = BayesianTreeConstructor()
+            constructor.bayesian(temp, dataset.type)
+
+            tree_name = "{}_tree_bayesian.nw".format(os.path.splitext(str(dataset.data))[0])
+            tree_newick = open(tree_name, "r")
+            newick_string = tree_newick.read()
+            tree_newick.close()
+
+            file_path = os.path.join(MEDIA_ROOT, 'trees', tree_name)
+            dataset.tree = tree_name
+            dataset.save()
+            os.rename(tree_name, file_path)
+
+            # Remove temporary file
+            os.remove(temp)
+            os.remove('log.txt')
+
+            return newick_string

@@ -88,7 +88,7 @@ DATABASES = {
                 },
         'NAME': 'phylo_data',
         'USER': 'root',
-        'PASSWORD': 'Chamalie$1995',
+        'PASSWORD': 'meraki',
         'HOST': 'localhost',
         'PORT': '8000',
     }

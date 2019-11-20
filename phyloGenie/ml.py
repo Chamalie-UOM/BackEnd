@@ -45,8 +45,8 @@ class MlTreeConstructor:
             phyml_cline = PhymlCommandline(input=data_file, datatype='aa')
 
         stdout, stderr = phyml_cline()
-        os.rename(base + '.phylip_phyml_tree.txt', base + '_ml.nw')  # tree file is generated
-        stat_file = base + '.phylip_phyml_stats.txt'
+        os.rename(base + '.phylip_phyml_tree', base + '_ml.nw')  # tree file is generated
+        stat_file = base + '.phylip_phyml_stats'
         os.remove(data_file)
         os.remove(stat_file)
 

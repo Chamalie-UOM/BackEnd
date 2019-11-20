@@ -41,11 +41,10 @@ class Recommendation(object):
         return self.noOfSeq, self.lengthOfSeq, self.typeOfSeq, self.score
 
     def RecommendationOne(self):
-        self.recommendedAlgorithms.append("Bayesian")
         self.recommendedAlgorithms.append("Maximum Likelihood")
 
     def RecommendationTwo(self):
-        self.recommendedAlgorithms.append("Maximum Parsimony")
+        self.recommendedAlgorithms.append("Maximum Likelihood")
         self.recommendedAlgorithms.append("NJ")
         self.recommendedAlgorithms.append("UPGMA")
 
@@ -56,48 +55,51 @@ class Recommendation(object):
     def RecommendationFour(self):
         self.recommendedAlgorithms.append("Maximum Parsimony")
 
+    def RecommendationFive(self):
+        self.recommendedAlgorithms.append("Bayesian")
+
     def RecommendByScore(self, thresh, score):
         if score <= thresh:
             self.RecommendationOne()
         else:
             self.RecommendationTwo()
 
-    def RecommendByScore2(self, thresh, score):
-        if score <= thresh:
-            self.RecommendationOne()
-        else:
-            self.RecommendationFour()
-
-    def RecommendByScore3(self, thresh, score):
-        if score <= thresh:
-            self.RecommendationOne()
-        else:
-            self.RecommendationThree()
-
     def recommendation(self, noOfSeq, lengthOfSeq, typeOfSeq, score):
 
         if noOfSeq <= 25:
             if lengthOfSeq <= 500:
                 if typeOfSeq == 'DNA':
-                    print("came")
-                    self.RecommendByScore(self.DNA_thresh, score)
+                    if self.DNA_thresh <= score:
+                        self.RecommendationThree()
+                    else:
+                        self.RecommendationFour()
                 else:
-                    print("ouch")
-                    self.RecommendByScore(self.AA_thresh, score)
-
+                    if self.AA_thresh <= score:
+                        self.RecommendationFour()
+                    else:
+                        self.RecommendationFive()
             else:
                 if typeOfSeq == 'DNA':
-                    self.RecommendByScore2(self.DNA_thresh, score)
+                    self.RecommendationFour()
                 else:
-                    self.RecommendByScore2(self.AA_thresh, score)
+                    self.RecommendationFive()
         else:
             if lengthOfSeq <= 500:
                 if typeOfSeq == 'DNA':
-                    self.RecommendByScore3(self.DNA_thresh, score)
+                    if self.DNA_thresh <= score:
+                        self.RecommendationTwo()
+                    else:
+                        self.RecommendationOne()
                 else:
-                    self.RecommendByScore3(self.AA_thresh, score)
+                    if self.AA_thresh <= score:
+                        self.RecommendationThree()
+                    else:
+                        self.RecommendationFive()
             else:
-                self.RecommendationOne()
+                if typeOfSeq == 'DNA':
+                    self.RecommendationOne()
+                else:
+                    self.RecommendationFive()
 
         # algorithms = ', '.join(self.recommendedAlgorithms)
         # algo_dict = {'algorithms': algorithms}
@@ -134,7 +136,7 @@ class TreeGenerator(object):
         # run UPGMA
         if algo == 'UPGMA':
             # Run UPGMA serial implementation when dataset has less than  200 taxa
-            if dataset.size < 200:
+            if dataset.size <= 50:
                 distanceMatrix = DistanceCalculation()
 
                 # Distance matrix calculation invocation
@@ -161,7 +163,7 @@ class TreeGenerator(object):
                 return newick_string
 
             # Run GPU implementation of UPGMA if dataset  has more than 200 taxa
-            elif (dataset.size > 200):
+            elif (dataset.size > 50):
                 # return "dataset larger than 200"
                 distanceMatrix = FullGpuDistanceCalculation()
 
@@ -190,7 +192,7 @@ class TreeGenerator(object):
 
         # run NJ
         elif algo == 'NJ':
-            if dataset.size < 200:
+            if dataset.size <= 50:
                 processor_type = 'CPU'
                 dis_matrix = self.calculate_distance_matrix(dataset.type, temp, processor_type)
 
@@ -215,7 +217,7 @@ class TreeGenerator(object):
                 return newick_string
 
             # Run GPU implementation of NJ if dataset  has more than 200 taxa
-            elif dataset.size >= 200:
+            elif dataset.size > 50:
                 # return "dataset larger than 200"
                 processor_type = 'GPU'
                 dis_matrix = self.calculate_distance_matrix(dataset.type, temp, processor_type)

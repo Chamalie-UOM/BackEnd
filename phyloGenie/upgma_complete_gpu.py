@@ -9,7 +9,7 @@ import numpy as np
 import pycuda.autoinit
 import pycuda.driver as drv
 from pycuda.compiler import SourceModule
-from DistanceMatrixCalculator import DistanceCalculator
+from phyloGenie.DistanceMatrixCalculatorGPU import DistanceCalculator_GPU
 
 
 # perform multiple sequence alignment using MUSCLE and write the alignment to a fasta file
@@ -23,7 +23,7 @@ class FullGpuDistanceCalculation:
         else:
             matrix_type = 'blosum62'
 
-        calculator = DistanceCalculator(matrix_type)
+        calculator = DistanceCalculator_GPU(matrix_type)
         alignment = AlignIO.read(in_file, "fasta")
         dm = calculator.get_distance(alignment)
         return dm

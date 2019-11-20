@@ -7,6 +7,7 @@ from phyloGenie.MrBayes import MrBayesCommandline
 from Bio import Phylo, SeqIO
 import re
 
+
 class BayesianTreeConstructor:
 
     def converter(self, file, data_type):
@@ -27,9 +28,18 @@ class BayesianTreeConstructor:
         bat_file = base + '_batch.txt'
         f = open(bat_file, "w+")
 
-        seq = ['set autoclose=yes nowarn=yes\n', 'execute ' + base + '.nex\n', 'lset nst=6 rates=gamma\n',
-               'mcmc ngen=10000 savebrlens=no samplefreq=10\n',
-               'sump burnin = 250\n', 'sumt burnin = 250\n', 'quit']
+        if data_type == 'DNA':
+            seq = ['set autoclose=yes nowarn=yes\n', 'set usebeagle=yes beagledevice=cpu beagleprecision=double\n',
+                   'set  beaglescaling=dynamic beaglesse=yes\n', 'execute ' + base + '.nex\n',
+                   'lset nst=6 rates=gamma\n',
+                   'mcmc ngen=10000 savebrlens=no samplefreq=10\n',
+                   'sump burnin = 250\n', 'sumt burnin = 250\n', 'quit']
+        else:
+            seq = ['set autoclose=yes nowarn=yes\n', 'set usebeagle=yes beagledevice=gpu\n',
+                   'set beagleprecision=single beaglescaling=dynamic\n', 'execute ' + base + '.nex\n',
+                   'lset nst=6 rates=gamma\n',
+                   'mcmc ngen=10000 savebrlens=no samplefreq=10\n',
+                   'sump burnin = 250\n', 'sumt burnin = 250\n', 'quit']
 
         f.writelines(seq)
         f.close()
@@ -45,8 +55,6 @@ class BayesianTreeConstructor:
         # print('time taken', (end_time - start_time))
         os.remove(bat_file)
         os.rename(base + '.nex.con.tre', base + '_tree.nexus')
-        for filename in glob.glob(base + '.nex*'):
-            os.remove(filename)
 
         tree_file = base + '_tree.nexus'
 
@@ -64,5 +72,5 @@ class BayesianTreeConstructor:
 
         Phylo.convert(tree_file, 'nexus', tree_base + '_bayesian.nw', 'newick')
         os.remove(tree_file)
-
-
+        for filename in glob.glob(base + '.nex*'):
+            os.remove(filename)
